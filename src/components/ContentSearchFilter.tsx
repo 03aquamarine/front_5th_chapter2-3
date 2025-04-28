@@ -1,7 +1,10 @@
 import { Search } from "lucide-react"
-import { Input } from "../shared/ui"
+import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui"
+import { useSearchQuery, useSelectedTag } from "../hooks/useStore"
 
-export const SearchInput = ({ searchQuery, setSearchQuery, searchPosts }) => {
+export const SearchInput = ({ searchPosts }) => {
+  const { searchQuery, setSearchQuery } = useSearchQuery()
+
   return (
     <div className="flex-1">
       <div className="relative">
@@ -18,10 +21,39 @@ export const SearchInput = ({ searchQuery, setSearchQuery, searchPosts }) => {
   )
 }
 
-const ContentSearchFilter = ({ searchQuery, setSearchQuery, searchPosts }) => {
+export const SearchSelectTag = ({ tags, fetchPostsByTag, updateURL }) => {
+  const { selectedTag, setSelectedTag } = useSelectedTag()
+
   return (
-    <div>
-      <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} searchPosts={searchPosts} />
+    <Select
+      value={selectedTag}
+      onValueChange={(value) => {
+        setSelectedTag(value)
+        fetchPostsByTag(value)
+        updateURL()
+      }}
+    >
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="태그 선택" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">모든 태그</SelectItem>
+        {tags.map((tag) => (
+          <SelectItem key={tag.url} value={tag.slug}>
+            {tag.slug}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
+
+const ContentSearchFilter = ({ searchPosts, tags, fetchPostsByTag, updateURL }) => {
+  return (
+    <div className="flex gap-4">
+      <SearchInput searchPosts={searchPosts} />
+
+      <SearchSelectTag tags={tags} fetchPostsByTag={fetchPostsByTag} updateURL={updateURL} />
     </div>
   )
 }

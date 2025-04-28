@@ -1,11 +1,10 @@
 import { Button, CardHeader, CardTitle } from "../shared/ui"
 import { Plus } from "lucide-react"
+import { useShowAddDialogStore } from "../store/showStore"
 
-interface CardHeaderProps {
-  setShowAddDialog: (show: boolean) => void
-}
+const ContentHeader = () => {
+  const { setShowAddDialog } = useShowAddDialogStore()
 
-const ContentHeader = ({ setShowAddDialog }: CardHeaderProps) => {
   return (
     <CardHeader>
       <CardTitle className="flex items-center justify-between">
