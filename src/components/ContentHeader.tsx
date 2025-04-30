@@ -1,6 +1,7 @@
-import { Button, CardHeader, CardTitle } from "../shared/ui"
 import { Plus } from "lucide-react"
 import { useShowAddDialogStore } from "../store/showStore"
+import { CardHeader, CardTitle } from "../shared/ui/Card/ui"
+import { Button } from "../shared/ui/Button/ui"
 
 const ContentHeader = () => {
   const { setShowAddDialog } = useShowAddDialogStore()

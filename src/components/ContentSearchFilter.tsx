@@ -1,6 +1,7 @@
 import { Search } from "lucide-react"
-import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui"
 import { useSearchQuery, useSelectedTag } from "../hooks/useStore"
+import { Input } from "../shared/ui/Input/ui"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/Select/ui"
 
 export const SearchInput = ({ searchPosts }) => {
   const { searchQuery, setSearchQuery } = useSearchQuery()
