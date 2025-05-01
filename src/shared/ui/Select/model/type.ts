@@ -1,4 +1,4 @@
-import { ClassNameProps } from "../../type"
+import { ClassNameProps } from "../../../model/type"
 import * as SelectPrimitive from "@radix-ui/react-select"
 
 export interface SelectTriggerProps

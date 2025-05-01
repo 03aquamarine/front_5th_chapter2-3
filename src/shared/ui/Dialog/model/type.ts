@@ -1,4 +1,4 @@
-import { ClassNameProps } from "../../type"
+import { ClassNameProps } from "../../../model/type"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 
 export interface DialogProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>, ClassNameProps {}

@@ -1,4 +1,4 @@
-import { ClassNameProps } from "../../type"
+import { ClassNameProps } from "../../../model/type"
 
 export interface TableProps extends React.TableHTMLAttributes<HTMLTableElement>, ClassNameProps {}
 
