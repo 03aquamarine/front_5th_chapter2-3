@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 
-import ContentHeader from "../components/ContentHeader"
-import ContentSearchFilter from "../components/ContentSearchFilter"
 import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/Card/ui"
 import { Input } from "../shared/ui/Input/ui"
 import { Button } from "../shared/ui/Button/ui"
@@ -12,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/Dialog/ui"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/Table/ui"
 import { useShowAddDialog } from "../hooks/useStore"
+import { useShowUserModal } from "../features/user/model/useShowUserModal"
+import UserProfileModal from "../features/user/ui/UserProfileModal"
 
 interface Post {
   id: number
@@ -71,7 +71,7 @@ export interface Tag {
   url: string
 }
 
-interface SelectUser {
+export interface SelectedUser {
   id: number
   image: string
   firstName: string
@@ -113,7 +113,7 @@ const PostsManager = () => {
   // 선택한 게시물, 댓글, 사용자 상태 관리
   const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
-  const [selectedUser, setSelectedUser] = useState<SelectUser | null>(null)
+  const [selectedUser, setSelectedUser] = useState<SelectedUser | null>(null)
 
   // URL 쿼리 파라미터 상태 관리
   // const { selectedTag, setSelectedTag } = useSelectedTag()
@@ -136,7 +136,8 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState<boolean>(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState<boolean>(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false)
-  const [showUserModal, setShowUserModal] = useState<boolean>(false)
+  // const [showUserModal, setShowUserModal] = useState<boolean>(false)
+  const { setShowUserModal } = useShowUserModal()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -766,38 +767,7 @@ const PostsManager = () => {
       </Dialog>
 
       {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>사용자 정보</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-            <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
-            <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
-              </p>
-              <p>
-                <strong>나이:</strong> {selectedUser?.age}
-              </p>
-              <p>
-                <strong>이메일:</strong> {selectedUser?.email}
-              </p>
-              <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
-              </p>
-              <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
-              </p>
-              <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-              </p>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <UserProfileModal selectedUser={selectedUser} />
     </Card>
   )
 }
