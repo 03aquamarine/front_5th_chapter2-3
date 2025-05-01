@@ -1,14 +1,12 @@
-// 대화상자 및 모달 보이는 경우 상태 관리
-
 import { create } from "zustand"
 
-interface ShowAddDialogState {
+interface ShowAddDialogStoreState {
   showAddDialog: boolean
   setShowAddDialog: (show: boolean) => void
 }
 
-// 새 게시물 추가
-export const useShowAddDialogStore = create<ShowAddDialogState>((set) => ({
+// 게시물 추가 대화상자 띄우기
+export const useShowAddDialogStore = create<ShowAddDialogStoreState>((set) => ({
   showAddDialog: false,
   setShowAddDialog: (show: boolean) => set(() => ({ showAddDialog: show })),
 }))

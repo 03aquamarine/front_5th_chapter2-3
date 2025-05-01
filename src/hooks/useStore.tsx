@@ -1,15 +1,6 @@
 // store 값과 액션을 반환하는 커스텀 훅
 
 import { useSearchQueryStore, useSelectedTagStore, useSortByStore } from "../store/queryParamsStore"
-import { useShowAddDialogStore } from "../store/showStore"
-
-// 새 게시물 추가
-export const useShowAddDialog = () => {
-  const showAddDialog = useShowAddDialogStore((state) => state.showAddDialog)
-  const setShowAddDialog = useShowAddDialogStore((state) => state.setShowAddDialog)
-
-  return { showAddDialog, setShowAddDialog }
-}
 
 // 게시물 검색
 export const useSearchQuery = () => {

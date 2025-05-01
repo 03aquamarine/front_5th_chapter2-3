@@ -6,6 +6,7 @@ interface UserProfileModalProps {
   selectedUser: SelectedUser | null
 }
 
+// 사용자 정보 모달
 const UserProfileModal: React.FC<UserProfileModalProps> = ({ selectedUser }) => {
   const { showUserModal, setShowUserModal } = useShowUserModal()
 

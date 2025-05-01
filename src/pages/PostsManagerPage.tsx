@@ -9,20 +9,12 @@ import { Textarea } from "../shared/ui/Textarea/ui"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/Select/ui"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/Dialog/ui"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/Table/ui"
-import { useShowAddDialog } from "../hooks/useStore"
 import { useShowUserModal } from "../features/user/model/useShowUserModal"
 import UserProfileModal from "../features/user/ui/UserProfileModal"
+import { Post, usePostStore, User } from "../features/post/model/usePostStore"
+import { useShowAddDialogStore } from "../features/post/model/useShowAddDialogStore"
+import AddPostDialog from "../features/post/ui/AddPostDialog"
 
-interface Post {
-  id: number
-  title: string
-  body: string
-  userId: number
-  views: number
-  tags: string[]
-  reactions: Reactions
-  author?: User | undefined
-}
 interface PostResponse {
   posts?: Post[]
   total: number
@@ -31,23 +23,6 @@ interface PostResponse {
   tags: string[]
   users?: User[]
   comments?: Comment[]
-}
-
-interface NewPost {
-  title: string
-  body: string
-  userId: number
-}
-
-interface User {
-  id: number
-  username: string
-  image: string
-}
-
-interface Reactions {
-  likes: number
-  dislikes: number
 }
 
 interface Comment {
@@ -99,11 +74,11 @@ const PostsManager = () => {
   const queryParams = new URLSearchParams(location.search)
 
   // 상태 관리
-  const [posts, setPosts] = useState<Post[]>([])
+  const posts = usePostStore((state) => state.posts)
+  const setPosts = usePostStore((state) => state.setPosts)
   const [tags, setTags] = useState<Tag[]>([])
 
   // 게시물 추가 및 수정 상태 관리
-  const [newPost, setNewPost] = useState<NewPost>({ title: "", body: "", userId: 1 })
   const [comments, setComments] = useState<{ [postId: number]: Comment[] }>({})
   const [newComment, setNewComment] = useState<NewComment>({ body: "", postId: null, userId: 1 })
 
@@ -130,13 +105,11 @@ const PostsManager = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   // 대화상자 및 모달 상태 관리
-  const { showAddDialog, setShowAddDialog } = useShowAddDialog()
-  // const [showAddDialog, setShowAddDialog] = useState<boolean>(false)
+  const setShowAddDialog = useShowAddDialogStore((state) => state.setShowAddDialog)
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false)
   const [showAddCommentDialog, setShowAddCommentDialog] = useState<boolean>(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState<boolean>(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false)
-  // const [showUserModal, setShowUserModal] = useState<boolean>(false)
   const { setShowUserModal } = useShowUserModal()
 
   // URL 업데이트 함수
@@ -236,23 +209,6 @@ const PostsManager = () => {
       console.error("태그별 게시물 가져오기 오류:", error)
     }
     setLoading(false)
-  }
-
-  // 게시물 추가
-  const addPost = async () => {
-    try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
   }
 
   // 게시물 업데이트
@@ -667,34 +623,7 @@ const PostsManager = () => {
         </div>
       </CardContent>
 
-      {/* 게시물 추가 대화상자 */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>새 게시물 추가</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              placeholder="제목"
-              value={newPost.title}
-              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-            />
-            <Textarea
-              rows={30}
-              placeholder="내용"
-              value={newPost.body}
-              onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-            />
-            <Input
-              type="number"
-              placeholder="사용자 ID"
-              value={newPost.userId}
-              onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
-            />
-            <Button onClick={addPost}>게시물 추가</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <AddPostDialog />
 
       {/* 게시물 수정 대화상자 */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
@@ -766,7 +695,6 @@ const PostsManager = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 사용자 모달 */}
       <UserProfileModal selectedUser={selectedUser} />
     </Card>
   )
