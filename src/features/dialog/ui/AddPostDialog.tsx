@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../share
 import { Input } from "../../../shared/ui/Input/ui"
 import { Textarea } from "../../../shared/ui/Textarea/ui"
 import { useShowAddDialogStore } from "../model/useShowAddDialogStore"
-import { usePostStore } from "../model/usePostStore"
+import { usePostStore } from "../../post/model/usePostStore"
 
 interface NewPost {
   title: string
